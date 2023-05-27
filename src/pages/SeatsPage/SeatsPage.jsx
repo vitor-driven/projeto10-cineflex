@@ -1,12 +1,21 @@
 import styled from "styled-components";
+import axios from "axios";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { GetSeats } from "../../Requests";
 
 export default function SeatsPage() {
     const [seats, setSeats] = useState([]);
+    const [selected, setSelected] = useState([]);
     const [footer, setFooter] = useState({});
-    const [purchase, setPurchase] = useState({});
+    const [userName, setName] = useState("");
+    const [userCpf, setCpf] = useState("");
+    const navigate = useNavigate();
+    const purchase = {
+        ids: [],
+        name: "",
+        cpf: "",
+    };
     const { showtimeId } = useParams();
 
     useEffect(() => {
@@ -29,6 +38,38 @@ export default function SeatsPage() {
         setSeats(data.seats);
     }
 
+    function clickSeat(seat) {
+        if (seat.isAvailable === true) {
+            const isSelected = selected.some((s) => seat.id === s.id);
+            if (isSelected) {
+                const newList = selected.filter((s) => seat.id !== s.id);
+                setSelected(newList);
+            } else {
+                setSelected([...selected, seat]);
+                seat.isSelected = true;
+            }
+        } else {
+            alert("Esse assento não está disponível");
+        }
+    }
+
+    function sendPurchase() {
+        const idArray = selected.map((obj) => obj.id);
+        if (selected.length === 0) {
+            alert("Selecione um assento");
+            return;
+        }
+        purchase.ids = idArray;
+        purchase.name = userName;
+        purchase.cpf = userCpf;
+        const postRequest = axios.post(
+            "https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many",
+            purchase
+        );
+        postRequest.then(() => navigate("/sucesso"));
+        postRequest.catch((err) => console.log(err.data));
+    }
+
     return (
         <PageContainer>
             Selecione o(s) assento(s)
@@ -38,9 +79,13 @@ export default function SeatsPage() {
                           <SeatItem
                               key={s.id}
                               data-test="seat"
+                              isSelected={selected.some(
+                                  (seat) => s.id === seat.id
+                              )}
                               className={`seat ${
                                   s.isAvailable ? "" : "unavailable"
                               } ${s.isSelected ? "selected" : ""}`}
+                              onClick={() => clickSeat(s)}
                           >
                               {s.name}
                           </SeatItem>
@@ -65,11 +110,22 @@ export default function SeatsPage() {
                 Nome do Comprador:
                 <input
                     data-test="client-name"
+                    type="text"
                     placeholder="Digite seu nome..."
+                    value={userName}
+                    onChange={(event) => setName(event.target.value)}
                 />
                 CPF do Comprador:
-                <input data-test="client-cpf" placeholder="Digite seu CPF..." />
-                <button>Reservar Assento(s)</button>
+                <input
+                    data-test="client-cpf"
+                    type="number"
+                    placeholder="Digite seu CPF..."
+                    value={userCpf}
+                    onChange={(event) => setCpf(event.target.value)}
+                />
+                <button data-test="book-seat-btn" onClick={sendPurchase}>
+                    Reservar Assento(s)
+                </button>
             </FormContainer>
             <FooterContainer data-test="footer">
                 <div>

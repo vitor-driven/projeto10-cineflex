@@ -12,7 +12,7 @@ export default function SuccessPage() {
                 Pedido feito <br /> com sucesso!
             </h1>
 
-            <TextContainer>
+            <TextContainer data-test="movie-info">
                 <strong>
                     <p>Filme e sessão</p>
                 </strong>
@@ -20,7 +20,7 @@ export default function SuccessPage() {
                 <p>03/03/2023 - {data.time}</p>
             </TextContainer>
 
-            <TextContainer>
+            <TextContainer data-test="seats-info">
                 <strong>
                     <p>Ingressos</p>
                 </strong>
@@ -32,7 +32,7 @@ export default function SuccessPage() {
                 <p>Assento 03</p>
             </TextContainer>
 
-            <TextContainer>
+            <TextContainer data-test="clients-info">
                 <strong>
                     <p>Comprador</p>
                 </strong>

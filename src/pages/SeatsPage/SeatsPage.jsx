@@ -38,21 +38,6 @@ export default function SeatsPage() {
         setSeats(data.seats);
     }
 
-    function clickSeat(seat) {
-        if (seat.isAvailable === true) {
-            const isSelected = selected.some((s) => seat.id === s.id);
-            if (isSelected) {
-                const newList = selected.filter((s) => seat.id !== s.id);
-                setSelected(newList);
-            } else {
-                setSelected([...selected, seat]);
-                seat.isSelected = true;
-            }
-        } else {
-            alert("Esse assento não está disponível");
-        }
-    }
-
     function sendPurchase() {
         const idArray = selected.map((obj) => obj.id);
         if (selected.length === 0) {
@@ -62,12 +47,33 @@ export default function SeatsPage() {
         purchase.ids = idArray;
         purchase.name = userName;
         purchase.cpf = userCpf;
+        console.log(purchase);
         const postRequest = axios.post(
             "https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many",
             purchase
         );
         postRequest.then(() => navigate("/sucesso"));
         postRequest.catch((err) => console.log(err.data));
+    }
+
+    function clickSeat(seat) {
+        console.log(`previous state: ${selected}`);
+        if (seat.isAvailable === true) {
+            const isSelected = selected.some((s) => seat.id === s.id);
+            if (isSelected) {
+                seat.isSelected = false;
+                const newList = selected.filter((s) => seat.id !== s.id);
+                setSelected(newList);
+            } else {
+                seat.isSelected = true;
+                setSelected([
+                    ...selected.filter((s) => s.id !== seat.id),
+                    seat,
+                ]);
+            }
+        } else {
+            alert("Esse assento não está disponível");
+        }
     }
 
     return (

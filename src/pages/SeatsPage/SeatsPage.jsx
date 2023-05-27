@@ -23,6 +23,7 @@ export default function SeatsPage() {
     }, []);
 
     function updateSeats(data) {
+        console.log(data);
         let footerData = {};
         footerData = {
             poster: data.movie.posterURL,
@@ -40,6 +41,8 @@ export default function SeatsPage() {
 
     function sendPurchase() {
         const idArray = selected.map((obj) => obj.id);
+        const nameArray = selected.map((obj) => obj.name);
+
         if (selected.length === 0) {
             alert("Selecione um assento");
             return;
@@ -47,17 +50,33 @@ export default function SeatsPage() {
         purchase.ids = idArray;
         purchase.name = userName;
         purchase.cpf = userCpf;
-        console.log(purchase);
+        console.log(footer);
+        const { posterURL, name, weekday, time } = footer;
+
+        const data = {
+            posterURL,
+            name,
+            weekday,
+            time,
+            seatNames: nameArray,
+        };
+
         const postRequest = axios.post(
             "https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many",
             purchase
         );
-        postRequest.then(() => navigate("/sucesso"));
+        postRequest.then(() =>
+            navigate("/sucesso", {
+                state: {
+                    purchase,
+                    data,
+                },
+            })
+        );
         postRequest.catch((err) => console.log(err.data));
     }
 
     function clickSeat(seat) {
-        console.log(`previous state: ${selected}`);
         if (seat.isAvailable === true) {
             const isSelected = selected.some((s) => seat.id === s.id);
             if (isSelected) {
@@ -74,6 +93,10 @@ export default function SeatsPage() {
         } else {
             alert("Esse assento não está disponível");
         }
+    }
+
+    function getSelectedSeatNames() {
+        return selected.map((seat) => seat.name);
     }
 
     return (

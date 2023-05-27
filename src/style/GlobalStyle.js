@@ -1,6 +1,10 @@
-import { createGlobalStyle } from "styled-components"
+import { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
+    a:visited { text-decoration: none; }
+    a:hover { text-decoration: none; }
+    a:focus { text-decoration: none; }
+    a:active { text-decoration: none; }
 	button {
 		height: 43px;
 		background: #E8833A;
@@ -35,6 +39,6 @@ const GlobalStyle = createGlobalStyle`
 		}
 		
 	}
-`
+`;
 
-export default GlobalStyle
+export default GlobalStyle;

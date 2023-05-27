@@ -22,9 +22,9 @@ export default function SessionsPage() {
             <div>
                 {sessions.days
                     ? sessions.days.map((s) => (
-                          <SessionContainer key={s.id}>
+                          <SessionContainer data-test="movie-day" key={s.id}>
                               <div>
-                                  <div data-test="movie-day" className="date">
+                                  <div className="date">
                                       {s.weekday} - {s.date}
                                   </div>
                                   <ButtonsContainer className="showtime-list">
@@ -44,17 +44,12 @@ export default function SessionsPage() {
                       ))
                     : "..."}
             </div>
-            <FooterContainer>
+            <FooterContainer data-test="footer">
                 <div>
-                    <img
-                        src={
-                            "https://br.web.img2.acsta.net/pictures/22/05/16/17/59/5165498.jpg"
-                        }
-                        alt="poster"
-                    />
+                    <img src={sessions.posterURL} alt="poster" />
                 </div>
                 <div>
-                    <p>Tudo em todo lugar ao mesmo tempo</p>
+                    <p>{sessions.title}</p>
                 </div>
             </FooterContainer>
         </PageContainer>

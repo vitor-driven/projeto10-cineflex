@@ -1,11 +1,20 @@
 import styled from "styled-components";
-import { useNavigate, useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 export default function SuccessPage() {
-    const navigate = useNavigate();
     const location = useLocation();
     const { purchase, data } = location.state;
     console.log(purchase, data);
+
+    function formatCpf(cpf) {
+        const str = String(cpf);
+        const newCpf = str.replace(
+            /(\d{3})(\d{3})(\d{3})(\d{2})/,
+            "$1.$2.$3.$4"
+        );
+        return newCpf;
+    }
+
     return (
         <PageContainer>
             <h1>
@@ -17,7 +26,9 @@ export default function SuccessPage() {
                     <p>Filme e sessão</p>
                 </strong>
                 <p>{data.name}</p>
-                <p>03/03/2023 - {data.time}</p>
+                <p>
+                    {data.date} - {data.time}
+                </p>
             </TextContainer>
 
             <TextContainer data-test="seats-info">
@@ -25,22 +36,21 @@ export default function SuccessPage() {
                     <p>Ingressos</p>
                 </strong>
                 {data.seatNames.map((s) => (
-                    <p>Assento {s}</p>
+                    <p>Assento {s.toString().padStart(2, "0")}</p>
                 ))}
-                <p>Assento 01</p>
-                <p>Assento 02</p>
-                <p>Assento 03</p>
             </TextContainer>
 
-            <TextContainer data-test="clients-info">
+            <TextContainer data-test="client-info">
                 <strong>
                     <p>Comprador</p>
                 </strong>
                 <p>Nome: {purchase.name}</p>
-                <p>CPF: {purchase.cpf}</p>
+                <p>CPF: {formatCpf(purchase.cpf)}</p>
             </TextContainer>
 
-            <button>Voltar para Home</button>
+            <Link to="/">
+                <button data-test="go-home-btn">Voltar para Home</button>
+            </Link>
         </PageContainer>
     );
 }

@@ -30,6 +30,7 @@ export default function SeatsPage() {
             name: data.movie.title,
             weekday: data.day.weekday,
             time: data.name,
+            date: data.day.date,
         };
 
         setFooter((footer) => ({
@@ -51,13 +52,14 @@ export default function SeatsPage() {
         purchase.name = userName;
         purchase.cpf = userCpf;
         console.log(footer);
-        const { posterURL, name, weekday, time } = footer;
+        const { posterURL, name, weekday, time, date } = footer;
 
         const data = {
             posterURL,
             name,
             weekday,
             time,
+            date,
             seatNames: nameArray,
         };
 
@@ -95,9 +97,13 @@ export default function SeatsPage() {
         }
     }
 
-    function getSelectedSeatNames() {
-        return selected.map((seat) => seat.name);
-    }
+    const handleCpfChange = (event) => {
+        const inputCpf = event.target.value;
+        const digitsOnly = inputCpf.replace(/\D/g, "");
+        const formattedCpf = digitsOnly.substring(0, 11);
+
+        setCpf(formattedCpf);
+    };
 
     return (
         <PageContainer>
@@ -150,7 +156,8 @@ export default function SeatsPage() {
                     type="number"
                     placeholder="Digite seu CPF..."
                     value={userCpf}
-                    onChange={(event) => setCpf(event.target.value)}
+                    maxLength={11}
+                    onInput={handleCpfChange}
                 />
                 <button data-test="book-seat-btn" onClick={sendPurchase}>
                     Reservar Assento(s)

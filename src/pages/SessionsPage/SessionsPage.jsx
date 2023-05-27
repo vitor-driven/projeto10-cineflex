@@ -24,12 +24,15 @@ export default function SessionsPage() {
                     ? sessions.days.map((s) => (
                           <SessionContainer key={s.id}>
                               <div>
-                                  <div className="date">
+                                  <div data-test="movie-day" className="date">
                                       {s.weekday} - {s.date}
                                   </div>
                                   <ButtonsContainer className="showtime-list">
                                       {s.showtimes.map((time) => (
-                                          <button key={time.id}>
+                                          <button
+                                              data-test="showtime"
+                                              key={time.id}
+                                          >
                                               <Link to={`/assentos/${time.id}`}>
                                                   {time.name}
                                               </Link>

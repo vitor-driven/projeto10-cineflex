@@ -5,6 +5,7 @@ const GlobalStyle = createGlobalStyle`
     a:hover { text-decoration: none; }
     a:focus { text-decoration: none; }
     a:active { text-decoration: none; }
+    a {color: inherit;}
 	button {
 		height: 43px;
 		background: #E8833A;

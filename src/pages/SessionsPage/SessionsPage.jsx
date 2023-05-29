@@ -64,9 +64,10 @@ const PageContainer = styled.div`
     color: #293845;
     margin-top: 30px;
     padding-bottom: 120px;
-    padding-top: 70px;
+    padding-top: 80px;
     div {
-        margin-top: 20px;
+        margin-top: 10px;
+        margin-bottom: 5px;
     }
 `;
 const SessionContainer = styled.div`
